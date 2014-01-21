@@ -97,32 +97,39 @@ while m<2000 && ~targetReached
     Pmax=40;
     Pmin=4;
     % Scale power down
-    power = power .* Pmax/100;
+    max_pow = max(abs(power));
+    if max_pow > Pmax
+	scale = Pmax / max_pow;
+	power = power .* scale;
+    end
     
-    if(power(1) > Pmax)
-        power(1) = Pmax;
-    elseif(power(1) < - Pmax)
-        power(1) = -Pmax;
-    end
-    if(power(2) > Pmax)
-        power(2) = Pmax;
-    elseif(power(2) < - Pmax)
-        power(2) = -Pmax;
-    end
-    if(power(1) < Pmin && power(1) > 0)
-        power(1) = Pmin;
-    elseif(power(1) > -Pmin && power(1) < 0)
-        power(1) = -Pmin;
-    end
-    if(power(2) < Pmin && power(2) > 0)
-        power(2) = Pmin;
-    elseif(power(2) > -Pmin && power(2) < 0)
-        power(2) = -Pmin;
-    end
+    pow_sign = sign(power);
+    power = floor(abs(power)) .* pow_sign;
+    
+%    if(power(1) > Pmax)
+%        power(1) = Pmax;
+%    elseif(power(1) < - Pmax)
+%        power(1) = -Pmax;
+%    end
+%    if(power(2) > Pmax)
+%        power(2) = Pmax;
+%    elseif(power(2) < - Pmax)
+%        power(2) = -Pmax;
+%    end
+%    if(power(1) < Pmin && power(1) > 0)
+%        power(1) = Pmin;
+%    elseif(power(1) > -Pmin && power(1) < 0)
+%	power(1) = -Pmin;
+%    end
+%    if(power(2) < Pmin && power(2) > 0)
+%        power(2) = Pmin;
+%    elseif(power(2) > -Pmin && power(2) < 0)
+%        power(2) = -Pmin;
+%    end
     
     %send new speeds to NXT
-    mB.Power              = floor(power(1));
-    mC.Power              = floor(power(2));
+    mB.Power              = power(1);
+    mC.Power              = power(2);
     mB.SendToNXT();
     mC.SendToNXT();
     
