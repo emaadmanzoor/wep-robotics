@@ -1,0 +1,37 @@
+USB:
+
+Ensure udev rules work:
+  /etc/udev/rules.d/70-lego.rules
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="0694", ATTRS{idProduct}=="0002", GROUP="lego", MODE="0664"
+
+aur/lego-udev-rules
+
+Also, user must be present int the GROUP group
+  sudo usermod -aG lego pingu
+
+  to verify udev
+    udevadm monitor --kernel --property --udev
+      See which /dev/* point the device appears on
+
+  sudo packer -S
+  If this doesn't work then you'll  get a segfault on COM_OpenNXT()
+  in MATLAB, at the callib('libusb', 'usb_get_busses') line
+
+  Also make sure you have libusb-0.1 (libusb-compat) installed,
+  the include is in /usr/include/usb.h
+
+bot mac: 00:16:53:18:80:b5
+
+Bluetooth:
+
+  Start the connection via btconnect
+    sudo ./btconnect 00:16:53:18:80:b5
+  Change permissions of the rfcomm device
+    sudo chmod 777 /dev/rfcomm0
+  Or add yourself to the dialout/
+  Run MATLAB
+
+  after you're done, btconnect does not release the rfcomm device
+  you'll need to do this yourself
+    sudo rfcomm release /dev/rfcomm*
