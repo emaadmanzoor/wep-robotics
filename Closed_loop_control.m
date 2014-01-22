@@ -102,30 +102,8 @@ while m<2000 && ~targetReached
 	scale = Pmax / max_pow;
 	power = power .* scale;
     end
-    
     pow_sign = sign(power);
     power = floor(abs(power)) .* pow_sign;
-    
-%    if(power(1) > Pmax)
-%        power(1) = Pmax;
-%    elseif(power(1) < - Pmax)
-%        power(1) = -Pmax;
-%    end
-%    if(power(2) > Pmax)
-%        power(2) = Pmax;
-%    elseif(power(2) < - Pmax)
-%        power(2) = -Pmax;
-%    end
-%    if(power(1) < Pmin && power(1) > 0)
-%        power(1) = Pmin;
-%    elseif(power(1) > -Pmin && power(1) < 0)
-%	power(1) = -Pmin;
-%    end
-%    if(power(2) < Pmin && power(2) > 0)
-%        power(2) = Pmin;
-%    elseif(power(2) > -Pmin && power(2) < 0)
-%        power(2) = -Pmin;
-%    end
     
     %send new speeds to NXT
     mB.Power              = power(1);
